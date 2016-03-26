@@ -1,6 +1,9 @@
 <script>
-    window.__RunImmutableJSDevToolsFormatterTests = true;
+    window.__ExposeImmutableJSDevToolsFormatterTests = true;
 </script>
 <!-- Load immutable globally in here, since I want the extension code and the test code to use different instances of Immutable (so we don't rely on instanceof which fail on a normal page when comparing between different Immutable instances) -->
 <script src="immutable.min.js"></script>
 <script src="extension/bundle.js"></script>
+<script>
+    runTests();
+</script>

@@ -58,8 +58,8 @@
 
 	(0, _immutableDevtools2.default)();
 
-	if (window.__RunImmutableJSDevToolsFormatterTests) {
-	    (0, _test2.default)();
+	if (window.__ExposeImmutableJSDevToolsFormatterTests) {
+	    window.runTests = _test2.default;
 	}
 
 /***/ },
