@@ -28,11 +28,11 @@ chrome.devtools.network.onNavigated.addListener(loadDevToolsFormatters)
 
 
 function getAndIncrementTimesExtensionHasLoaded(){
-  var timesExtensionHasLoaded = localStorage.getItem("timesExtensionHasLoaded");
-  if (timesExtensionHasLoaded === undefined){
-    timesExtensionHasLoaded = 0;
-  }
-  timesExtensionHasLoaded++;
-  localStorage.setItem("timesExtensionHasLoaded", timesExtensionHasLoaded);
-  return parseInt(timesExtensionHasLoaded, 10)
-  }
+    var timesExtensionHasLoaded = localStorage.getItem("timesExtensionHasLoaded");
+    if (timesExtensionHasLoaded === undefined){
+      timesExtensionHasLoaded = 0;
+    }
+    timesExtensionHasLoaded++;
+    localStorage.setItem("timesExtensionHasLoaded", timesExtensionHasLoaded);
+    return parseInt(timesExtensionHasLoaded, 10)
+}
