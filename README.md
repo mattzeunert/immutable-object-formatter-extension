@@ -2,6 +2,8 @@
 
 Transforms Immutable JS objects to a more readable format when they are logged to the console.
 
+[Install the Chrome Extension](https://chrome.google.com/webstore/detail/immutablejs-object-format/hgldghadipiblonfkkicmgcbbijnpeog)
+
 Based on [immutable-devtools](https://github.com/andrewdavey/immutable-devtools).
 
 ## How it works
