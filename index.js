@@ -1,7 +1,8 @@
 import installDevTools from './immutable-devtools'
-import runTests from "./test"
 installDevTools()
 
-if (window.__ExposeImmutableJSDevToolsFormatterTests) {
-    window.runTests = runTests;
+import {isRecord as isRecordForTesting} from "./immutable-devtools/create-formatters"
+
+if (window.__ExposeIsRecordForTesting) {
+    window.isRecordForTesting = isRecordForTesting;
 }

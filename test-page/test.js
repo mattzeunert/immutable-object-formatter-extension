@@ -1,6 +1,4 @@
-import {isRecord as isRecordForTesting} from "./immutable-devtools/create-formatters"
-
-export default function(){
+function runTests(){
     window.test = Immutable.fromJS({"a": "test", b: [{a:2},{b:3}]})
     console.log(window.test)
 

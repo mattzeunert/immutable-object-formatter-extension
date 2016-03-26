@@ -50,16 +50,14 @@
 
 	var _immutableDevtools2 = _interopRequireDefault(_immutableDevtools);
 
-	var _test = __webpack_require__(4);
-
-	var _test2 = _interopRequireDefault(_test);
+	var _createFormatters = __webpack_require__(2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	(0, _immutableDevtools2.default)();
 
-	if (window.__ExposeImmutableJSDevToolsFormatterTests) {
-	    window.runTests = _test2.default;
+	if (window.__ExposeIsRecordForTesting) {
+	    window.isRecordForTesting = _createFormatters.isRecord;
 	}
 
 /***/ },
@@ -5286,81 +5284,6 @@
 	  return Immutable;
 
 	}));
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	exports.default = function () {
-	    window.test = Immutable.fromJS({ "a": "test", b: [{ a: 2 }, { b: 3 }] });
-	    console.log(window.test);
-
-	    var ABRecord = function (_Immutable$Record) {
-	        _inherits(ABRecord, _Immutable$Record);
-
-	        function ABRecord() {
-	            _classCallCheck(this, ABRecord);
-
-	            return _possibleConstructorReturn(this, Object.getPrototypeOf(ABRecord).apply(this, arguments));
-	        }
-
-	        _createClass(ABRecord, [{
-	            key: "getAB",
-	            value: function getAB() {
-	                return this.a + this.b;
-	            }
-	        }]);
-
-	        return ABRecord;
-	    }(Immutable.Record({ a: 1, b: 2 }));
-
-	    window.record = new ABRecord();
-	    window.record2 = new ABRecord({ a: 2 });
-	    console.log(window.record);
-	    console.log(window.record2);
-
-	    window.orderedMap = Immutable.OrderedMap({ key: "value" });
-	    window.orderedMap2 = Immutable.OrderedMap([["key", "value"], ["key2", "value2"]]);
-	    console.log(window.orderedMap);
-	    console.log(window.orderedMap2);
-
-	    window.orderedSet = Immutable.OrderedSet(["hello", "aaa"]);
-	    console.log(window.orderedSet);
-
-	    window.list = Immutable.List(["hello", "world"]);
-	    console.log(window.list);
-
-	    window.map = Immutable.Map({ hello: "world" });
-	    console.log(window.map);
-
-	    window.set = Immutable.Set(["hello", "aaa"]);
-	    console.log(window.set);
-
-	    window.stack = Immutable.Stack(["hello", "aaa"]);
-	    console.log(window.stack);
-
-	    console.assert((0, _createFormatters.isRecord)(record));
-	    console.assert((0, _createFormatters.isRecord)(record2));
-	    [orderedMap, orderedMap2, orderedSet, list, map, set, stack].forEach(function (o) {
-	        console.assert(!(0, _createFormatters.isRecord)(o));
-	    });
-	};
-
-	var _createFormatters = __webpack_require__(2);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /***/ }
 /******/ ]);

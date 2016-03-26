@@ -21,4 +21,5 @@ Then all that's left to do is to load the code in "devtools.js".
 
 1. `npm install`
 2. `npm install webpack-dev-server -g`
-3. Either open "index.html" for testing, or load the "/extension" as an unpacked Chrome extension
+3. Load the "/extension" directory as an unpacked Chrome extension
+4. Open "/test-page/index.html" to check everything looks as expected
