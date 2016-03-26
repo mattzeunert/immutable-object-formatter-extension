@@ -1,6 +1,7 @@
 Open the console and check that everything looks alright.
 
 <script>
+    console.time("Load formatters")
     window.__ExposeIsRecordForTesting = true;
 </script>
 <!-- Load immutable globally in here, since I want the extension code and the test code to use different instances of Immutable (so we don't rely on instanceof which fail on a normal page when comparing between different Immutable instances) -->
@@ -8,7 +9,16 @@ Open the console and check that everything looks alright.
 <script src="test.js"></script>
 
 <script>
-setTimeout(function(){
-    runTests();
-}, 500);
+function checkIfLoaded(){
+    if (window.isRecordForTesting !== undefined){
+        console.timeEnd("Load formatters");
+        runTests();
+    }
+    else {
+        setTimeout(function(){
+            checkIfLoaded();
+        }, 5)
+    }
+};
+checkIfLoaded();
 </script>
