@@ -46,61 +46,262 @@
 
 	"use strict";
 
-	var _immutableDevtools = __webpack_require__(3);
+	var _immutableDevtools = __webpack_require__(1);
 
 	var _immutableDevtools2 = _interopRequireDefault(_immutableDevtools);
 
-	var _createFormatters = __webpack_require__(4);
+	var _test = __webpack_require__(4);
+
+	var _test2 = _interopRequireDefault(_test);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import installDevTools from 'immutable-devtools'
 	(0, _immutableDevtools2.default)();
 
-	// var Immutable = require("./immutable.min.js")
-
-	// window.test = Immutable.fromJS({"a": "test", b: [{a:2},{b:3}]})
-	// console.log(window.test)
-
-	// class ABRecord extends Immutable.Record({a:1,b:2}) {
-	//   getAB() {
-	//     return this.a + this.b;
-	//   }
-	// }
-
-	// window.record = new ABRecord();
-	// window.record2 = new ABRecord({a: 2});
-	// console.log(window.record);
-	// console.log(window.record2);
-
-	// window.orderedMap = Immutable.OrderedMap({key: "value"});
-	// window.orderedMap2 = Immutable.OrderedMap([["key", "value"], ["key2", "value2"]]);
-	// console.log(window.orderedMap);
-	// console.log(window.orderedMap2);
-
-	// window.orderedSet = Immutable.OrderedSet(["hello", "aaa"]);
-	// console.log(window.orderedSet);
-
-	// window.list = Immutable.List(["hello", "world"]);
-	// console.log(window.list)
-
-	// window.map = Immutable.Map({hello: "world"})
-	// console.log(window.map)
-
-	// window.set = Immutable.Set(["hello", "aaa"])
-	// console.log(window.set)
-
-	// window.stack = Immutable.Stack(["hello", "aaa"])
-	// console.log(window.stack)
-
-	// console.assert(isRecordForTesting(record))
-	// console.assert(isRecordForTesting(record2));
-	// [orderedMap, orderedMap2, orderedSet, list, map, set, stack].forEach(function(o){
-	//     console.assert(!isRecordForTesting(o))
-	// })
+	if (window.__RunImmutableJSDevToolsFormatterTests) {
+	    (0, _test2.default)();
+	}
 
 /***/ },
 /* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = install;
+
+	var _createFormatters2 = __webpack_require__(2);
+
+	var _createFormatters3 = _interopRequireDefault(_createFormatters2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function install(Immutable) {
+	  if (typeof window === "undefined") {
+	    throw new Error("Can only install immutable-devtools in a browser environment.");
+	  }
+
+	  // Don't install more than once.
+	  if (window.__ImmutableJSDevToolsFormattersInstalled === true) {
+	    return;
+	  }
+
+	  window.devtoolsFormatters = window.devtoolsFormatters || [];
+	  window.__ImmutableJSDevToolsFormattersInstalled = true;
+
+	  var _createFormatters = (0, _createFormatters3.default)(Immutable);
+
+	  var RecordFormatter = _createFormatters.RecordFormatter;
+	  var OrderedMapFormatter = _createFormatters.OrderedMapFormatter;
+	  var OrderedSetFormatter = _createFormatters.OrderedSetFormatter;
+	  var ListFormatter = _createFormatters.ListFormatter;
+	  var MapFormatter = _createFormatters.MapFormatter;
+	  var SetFormatter = _createFormatters.SetFormatter;
+	  var StackFormatter = _createFormatters.StackFormatter;
+
+
+	  window.devtoolsFormatters.push(RecordFormatter, OrderedMapFormatter, OrderedSetFormatter, ListFormatter, MapFormatter, SetFormatter, StackFormatter);
+	}
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.isRecord = undefined;
+	exports.default = createFormatter;
+
+	var _immutable = __webpack_require__(3);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var listStyle = { style: 'list-style-type: none; padding: 0; margin: 0 0 0 12px; font-style: normal' };
+	var immutableNameStyle = { style: 'color: rgb(232,98,0)' };
+	var keyStyle = { style: 'color: #881391' };
+	var defaultValueKeyStyle = { style: 'color: #777' };
+	var alteredValueKeyStyle = { style: 'color: #881391; font-weight: bolder' };
+	var inlineValuesStyle = { style: 'color: #777; font-style: italic' };
+	var nullStyle = { style: 'color: #777' };
+
+	function isRecord(record) {
+	  // can't use this because value of Immutable.Record will depend on Immutable instance
+	  //return record instanceof Immutable.Record
+	  return record._defaultValues !== undefined;
+	}
+	exports.isRecord = isRecord;
+	function createFormatter() {
+
+	  var reference = function reference(object, config) {
+	    if (typeof object === 'undefined') return ['span', nullStyle, 'undefined'];else if (object === 'null') return ['span', nullStyle, 'null'];
+
+	    return ['object', { object: object, config: config }];
+	  };
+
+	  var renderIterableHeader = function renderIterableHeader(iterable) {
+	    var name = arguments.length <= 1 || arguments[1] === undefined ? 'Iterable' : arguments[1];
+	    return ['span', ['span', immutableNameStyle, name], ['span', '[' + iterable.size + ']']];
+	  };
+
+	  var hasBody = function hasBody(collection, config) {
+	    return collection.size > 0 && !(config && config.noPreview);
+	  };
+
+	  var renderIterableBody = function renderIterableBody(collection, mapper) {
+	    var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+	    if (options.sorted) {
+	      collection = collection.sortBy(function (value, key) {
+	        return key;
+	      });
+	    }
+	    var children = collection.map(mapper).toList().toJS();
+	    return ['ol', listStyle].concat(_toConsumableArray(children));
+	  };
+
+	  var RecordFormatter = {
+	    header: function header(record, config) {
+	      if (!isRecord(record)) return null;
+
+	      var defaults = record.clear();
+	      var changed = !_immutable2.default.is(defaults, record);
+
+	      if (config && config.noPreview) return ['span', changed ? immutableNameStyle : nullStyle, record._name || record.constructor.name || 'Record'];
+
+	      var inlinePreview = void 0;
+	      if (!changed) {
+	        inlinePreview = ['span', inlineValuesStyle, '{}'];
+	      } else {
+	        var preview = record.keySeq().reduce(function (preview, key) {
+	          if (_immutable2.default.is(defaults.get(key), record.get(key))) return preview;
+	          if (preview.length) preview.push(', ');
+
+	          preview.push(['span', {}, ['span', keyStyle, key + ': '], reference(record.get(key), { noPreview: true })]);
+	          return preview;
+	        }, []);
+	        inlinePreview = ['span', inlineValuesStyle, '{'].concat(_toConsumableArray(preview), ['}']);
+	      }
+	      return ['span', {}, ['span', immutableNameStyle, record._name || record.constructor.name || 'Record'], ' ', inlinePreview];
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(record) {
+	      var defaults = record.clear();
+	      var children = record.keySeq().map(function (key) {
+	        var style = _immutable2.default.is(defaults.get(key), record.get(key)) ? defaultValueKeyStyle : alteredValueKeyStyle;
+	        return ['li', {}, ['span', style, key + ': '], reference(record.get(key))];
+	      }).toJS();
+	      return ['ol', listStyle].concat(_toConsumableArray(children));
+	    }
+	  };
+
+	  var ListFormatter = {
+	    header: function header(o) {
+	      if (!_immutable2.default.List.isList(o)) return null;
+	      return renderIterableHeader(o, 'List');
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(o) {
+	      return renderIterableBody(o, function (value, key) {
+	        return ['li', ['span', keyStyle, key + ': '], reference(value)];
+	      });
+	    }
+	  };
+
+	  var StackFormatter = {
+	    header: function header(o) {
+	      if (!_immutable2.default.Stack.isStack(o)) return null;
+	      return renderIterableHeader(o, 'Stack');
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(o) {
+	      return renderIterableBody(o, function (value, key) {
+	        return ['li', ['span', keyStyle, key + ': '], reference(value)];
+	      });
+	    }
+	  };
+
+	  var MapFormatter = {
+	    header: function header(o) {
+	      if (!_immutable2.default.Map.isMap(o)) return null;
+	      return renderIterableHeader(o, 'Map');
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(o) {
+	      return renderIterableBody(o, function (value, key) {
+	        return ['li', {}, '{', reference(key), ' => ', reference(value), '}'];
+	      }, { sorted: true });
+	    }
+	  };
+
+	  var OrderedMapFormatter = {
+	    header: function header(o) {
+	      if (!_immutable2.default.OrderedMap.isOrderedMap(o)) return null;
+	      return renderIterableHeader(o, 'OrderedMap');
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(o) {
+	      return renderIterableBody(o, function (value, key) {
+	        return ['li', {}, '{', reference(key), ' => ', reference(value), '}'];
+	      });
+	    }
+	  };
+
+	  var SetFormatter = {
+	    header: function header(o) {
+	      if (!_immutable2.default.Set.isSet(o)) return null;
+	      return renderIterableHeader(o, 'Set');
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(o) {
+	      return renderIterableBody(o, function (value) {
+	        return ['li', reference(value)];
+	      }, { sorted: true });
+	    }
+	  };
+
+	  var OrderedSetFormatter = {
+	    header: function header(o) {
+	      if (!_immutable2.default.OrderedSet.isOrderedSet(o)) return null;
+	      return renderIterableHeader(o, 'OrderedSet');
+	    },
+
+	    hasBody: hasBody,
+	    body: function body(o) {
+	      return renderIterableBody(o, function (value) {
+	        return ['li', reference(value)];
+	      });
+	    }
+	  };
+
+	  return {
+	    RecordFormatter: RecordFormatter,
+	    OrderedMapFormatter: OrderedMapFormatter,
+	    OrderedSetFormatter: OrderedSetFormatter,
+	    ListFormatter: ListFormatter,
+	    MapFormatter: MapFormatter,
+	    SetFormatter: SetFormatter,
+	    StackFormatter: StackFormatter
+	  };
+	}
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5087,245 +5288,79 @@
 	}));
 
 /***/ },
-/* 2 */,
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.default = install;
 
-	var _createFormatters2 = __webpack_require__(4);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _createFormatters3 = _interopRequireDefault(_createFormatters2);
+	exports.default = function () {
+	    window.test = Immutable.fromJS({ "a": "test", b: [{ a: 2 }, { b: 3 }] });
+	    console.log(window.test);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	    var ABRecord = function (_Immutable$Record) {
+	        _inherits(ABRecord, _Immutable$Record);
 
-	function install(Immutable) {
-	  if (typeof window === "undefined") {
-	    throw new Error("Can only install immutable-devtools in a browser environment.");
-	  }
+	        function ABRecord() {
+	            _classCallCheck(this, ABRecord);
 
-	  // Don't install more than once.
-	  if (window.__ImmutableJSDevToolsFormattersInstalled === true) {
-	    return;
-	  }
+	            return _possibleConstructorReturn(this, Object.getPrototypeOf(ABRecord).apply(this, arguments));
+	        }
 
-	  window.devtoolsFormatters = window.devtoolsFormatters || [];
-	  window.__ImmutableJSDevToolsFormattersInstalled = true;
+	        _createClass(ABRecord, [{
+	            key: "getAB",
+	            value: function getAB() {
+	                return this.a + this.b;
+	            }
+	        }]);
 
-	  var _createFormatters = (0, _createFormatters3.default)(Immutable);
+	        return ABRecord;
+	    }(Immutable.Record({ a: 1, b: 2 }));
 
-	  var RecordFormatter = _createFormatters.RecordFormatter;
-	  var OrderedMapFormatter = _createFormatters.OrderedMapFormatter;
-	  var OrderedSetFormatter = _createFormatters.OrderedSetFormatter;
-	  var ListFormatter = _createFormatters.ListFormatter;
-	  var MapFormatter = _createFormatters.MapFormatter;
-	  var SetFormatter = _createFormatters.SetFormatter;
-	  var StackFormatter = _createFormatters.StackFormatter;
+	    window.record = new ABRecord();
+	    window.record2 = new ABRecord({ a: 2 });
+	    console.log(window.record);
+	    console.log(window.record2);
 
+	    window.orderedMap = Immutable.OrderedMap({ key: "value" });
+	    window.orderedMap2 = Immutable.OrderedMap([["key", "value"], ["key2", "value2"]]);
+	    console.log(window.orderedMap);
+	    console.log(window.orderedMap2);
 
-	  window.devtoolsFormatters.push(RecordFormatter, OrderedMapFormatter, OrderedSetFormatter, ListFormatter, MapFormatter, SetFormatter, StackFormatter);
+	    window.orderedSet = Immutable.OrderedSet(["hello", "aaa"]);
+	    console.log(window.orderedSet);
 
-	  installed = true;
-	}
+	    window.list = Immutable.List(["hello", "world"]);
+	    console.log(window.list);
 
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
+	    window.map = Immutable.Map({ hello: "world" });
+	    console.log(window.map);
 
-	'use strict';
+	    window.set = Immutable.Set(["hello", "aaa"]);
+	    console.log(window.set);
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.isRecord = undefined;
-	exports.default = createFormatter;
+	    window.stack = Immutable.Stack(["hello", "aaa"]);
+	    console.log(window.stack);
 
-	var _immutable = __webpack_require__(1);
+	    console.assert((0, _createFormatters.isRecord)(record));
+	    console.assert((0, _createFormatters.isRecord)(record2));
+	    [orderedMap, orderedMap2, orderedSet, list, map, set, stack].forEach(function (o) {
+	        console.assert(!(0, _createFormatters.isRecord)(o));
+	    });
+	};
 
-	var _immutable2 = _interopRequireDefault(_immutable);
+	var _createFormatters = __webpack_require__(2);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	var listStyle = { style: 'list-style-type: none; padding: 0; margin: 0 0 0 12px; font-style: normal' };
-	var immutableNameStyle = { style: 'color: rgb(232,98,0)' };
-	var keyStyle = { style: 'color: #881391' };
-	var defaultValueKeyStyle = { style: 'color: #777' };
-	var alteredValueKeyStyle = { style: 'color: #881391; font-weight: bolder' };
-	var inlineValuesStyle = { style: 'color: #777; font-style: italic' };
-	var nullStyle = { style: 'color: #777' };
-
-	function isRecord(record) {
-	  // can't use this because value of Immutable.Record will depend on Immutable instance
-	  //return record instanceof Immutable.Record
-	  return record._defaultValues !== undefined;
-	}
-	exports.isRecord = isRecord;
-	function createFormatter() {
-
-	  var reference = function reference(object, config) {
-	    if (typeof object === 'undefined') return ['span', nullStyle, 'undefined'];else if (object === 'null') return ['span', nullStyle, 'null'];
-
-	    return ['object', { object: object, config: config }];
-	  };
-
-	  var renderIterableHeader = function renderIterableHeader(iterable) {
-	    var name = arguments.length <= 1 || arguments[1] === undefined ? 'Iterable' : arguments[1];
-	    return ['span', ['span', immutableNameStyle, name], ['span', '[' + iterable.size + ']']];
-	  };
-
-	  var hasBody = function hasBody(collection, config) {
-	    return collection.size > 0 && !(config && config.noPreview);
-	  };
-
-	  var renderIterableBody = function renderIterableBody(collection, mapper) {
-	    var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-	    if (options.sorted) {
-	      collection = collection.sortBy(function (value, key) {
-	        return key;
-	      });
-	    }
-	    var children = collection.map(mapper).toList().toJS();
-	    return ['ol', listStyle].concat(_toConsumableArray(children));
-	  };
-
-	  var RecordFormatter = {
-	    header: function header(record, config) {
-	      if (!isRecord(record)) return null;
-
-	      var defaults = record.clear();
-	      var changed = !_immutable2.default.is(defaults, record);
-
-	      if (config && config.noPreview) return ['span', changed ? immutableNameStyle : nullStyle, record._name || record.constructor.name || 'Record'];
-
-	      var inlinePreview = void 0;
-	      if (!changed) {
-	        inlinePreview = ['span', inlineValuesStyle, '{}'];
-	      } else {
-	        var preview = record.keySeq().reduce(function (preview, key) {
-	          if (_immutable2.default.is(defaults.get(key), record.get(key))) return preview;
-	          if (preview.length) preview.push(', ');
-
-	          preview.push(['span', {}, ['span', keyStyle, key + ': '], reference(record.get(key), { noPreview: true })]);
-	          return preview;
-	        }, []);
-	        inlinePreview = ['span', inlineValuesStyle, '{'].concat(_toConsumableArray(preview), ['}']);
-	      }
-	      return ['span', {}, ['span', immutableNameStyle, record._name || record.constructor.name || 'Record'], ' ', inlinePreview];
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(record) {
-	      var defaults = record.clear();
-	      var children = record.keySeq().map(function (key) {
-	        var style = _immutable2.default.is(defaults.get(key), record.get(key)) ? defaultValueKeyStyle : alteredValueKeyStyle;
-	        return ['li', {}, ['span', style, key + ': '], reference(record.get(key))];
-	      }).toJS();
-	      return ['ol', listStyle].concat(_toConsumableArray(children));
-	    }
-	  };
-
-	  var ListFormatter = {
-	    header: function header(o) {
-	      if (!_immutable2.default.List.isList(o)) return null;
-	      return renderIterableHeader(o, 'List');
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(o) {
-	      return renderIterableBody(o, function (value, key) {
-	        return ['li', ['span', keyStyle, key + ': '], reference(value)];
-	      });
-	    }
-	  };
-
-	  var StackFormatter = {
-	    header: function header(o) {
-	      if (!_immutable2.default.Stack.isStack(o)) return null;
-	      return renderIterableHeader(o, 'Stack');
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(o) {
-	      return renderIterableBody(o, function (value, key) {
-	        return ['li', ['span', keyStyle, key + ': '], reference(value)];
-	      });
-	    }
-	  };
-
-	  var MapFormatter = {
-	    header: function header(o) {
-	      if (!_immutable2.default.Map.isMap(o)) return null;
-	      return renderIterableHeader(o, 'Map');
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(o) {
-	      return renderIterableBody(o, function (value, key) {
-	        return ['li', {}, '{', reference(key), ' => ', reference(value), '}'];
-	      }, { sorted: true });
-	    }
-	  };
-
-	  var OrderedMapFormatter = {
-	    header: function header(o) {
-	      if (!_immutable2.default.OrderedMap.isOrderedMap(o)) return null;
-	      return renderIterableHeader(o, 'OrderedMap');
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(o) {
-	      return renderIterableBody(o, function (value, key) {
-	        return ['li', {}, '{', reference(key), ' => ', reference(value), '}'];
-	      });
-	    }
-	  };
-
-	  var SetFormatter = {
-	    header: function header(o) {
-	      if (!_immutable2.default.Set.isSet(o)) return null;
-	      return renderIterableHeader(o, 'Set');
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(o) {
-	      return renderIterableBody(o, function (value) {
-	        return ['li', reference(value)];
-	      }, { sorted: true });
-	    }
-	  };
-
-	  var OrderedSetFormatter = {
-	    header: function header(o) {
-	      if (!_immutable2.default.OrderedSet.isOrderedSet(o)) return null;
-	      return renderIterableHeader(o, 'OrderedSet');
-	    },
-
-	    hasBody: hasBody,
-	    body: function body(o) {
-	      return renderIterableBody(o, function (value) {
-	        return ['li', reference(value)];
-	      });
-	    }
-	  };
-
-	  return {
-	    RecordFormatter: RecordFormatter,
-	    OrderedMapFormatter: OrderedMapFormatter,
-	    OrderedSetFormatter: OrderedSetFormatter,
-	    ListFormatter: ListFormatter,
-	    MapFormatter: MapFormatter,
-	    SetFormatter: SetFormatter,
-	    StackFormatter: StackFormatter
-	  };
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /***/ }
 /******/ ]);

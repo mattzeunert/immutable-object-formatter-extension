@@ -32,6 +32,4 @@ export default function install(Immutable) {
     SetFormatter,
     StackFormatter
   );
-
-  installed = true;
 }
