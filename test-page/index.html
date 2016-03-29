@@ -1,24 +1,37 @@
+<head>
+    <title>Immutable Object Formatter Extension Test Page</title>
+    <script>
+        console.time("Load formatters")
+    </script>
+</head>
+
 Open the console and check that everything looks alright.
 
-<script>
-    console.time("Load formatters")
-    window.__ExposeIsRecordForTesting = true;
-</script>
 <!-- Load immutable globally in here, since I want the extension code and the test code to use different instances of Immutable (so we don't rely on instanceof which fail on a normal page when comparing between different Immutable instances) -->
 <script src="immutable.min.js"></script>
 <script src="test.js"></script>
 
 <script>
+    // false means it uses the chrome extension instead of including bundle.js directly
+    const testIsRecord = false;
+    if (testIsRecord) {
+        window.__ExposeIsRecordForTesting = true;
+        var script = document.createElement("script");
+        script.src = "../extension/bundle.js";
+    }
+</script>
+
+<script>
 function checkIfLoaded(){
-    if (window.isRecordForTesting !== undefined){
+    if (window.__ImmutableJSDevToolsFormattersInstalled !== undefined){
         console.timeEnd("Load formatters");
         runTests();
     }
     else {
         setTimeout(function(){
             checkIfLoaded();
-        }, 5)
+        }, 1)
     }
-};
+}
 checkIfLoaded();
 </script>

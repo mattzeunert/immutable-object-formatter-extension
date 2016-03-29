@@ -33,9 +33,12 @@ function runTests(){
     window.stack = Immutable.Stack(["hello", "aaa"])
     console.log(window.stack)
 
-    console.assert(isRecordForTesting(record))
-    console.assert(isRecordForTesting(record2));
-    [orderedMap, orderedMap2, orderedSet, list, map, set, stack].forEach(function(o){
-        console.assert(!isRecordForTesting(o))
-    })
+    if (window.isRecordForTesting) {
+        console.assert(isRecordForTesting(record))
+        console.assert(isRecordForTesting(record2));
+        [orderedMap, orderedMap2, orderedSet, list, map, set, stack].forEach(function(o){
+            console.assert(!isRecordForTesting(o))
+        })
+        console.log("Ran isRecord tests")
+    }
 }
