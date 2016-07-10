@@ -12,7 +12,7 @@ The code in "/immutable-devtools" is essentially just a copy of `immutable-devto
 
 The two main differences are:
 
-1. We can't use `instanceof Immutable.Record` to detect if an object is a record, since we don't have access to the Immutable module that's loaded on the page. (We only have access to the one loaded in the extension.)
+1. We can't use `instanceof Immutable.Record` to detect if an object is a record, since we don't have access to the Immutable module that's loaded on the page. (We only have access to the one loaded in the extension.) We can still identify Records correctly, but the way we do it means there's a chance that an internal change in how Immutable.JS could break that.
 2. The code can be loaded and unloaded several times on the same page, so we can't rely on variables inside the modules to detect if the formatters have already been injected into the page. Instead I'm setting a `window.__ImmutableJSDevToolsFormattersInstalled` property.
 
 Then all that's left to do is to load the code in "devtools.js".
