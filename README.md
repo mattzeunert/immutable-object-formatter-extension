@@ -6,6 +6,10 @@ Transforms Immutable JS objects to a more readable format when they are logged t
 
 Based on [immutable-devtools](https://github.com/andrewdavey/immutable-devtools).
 
+THe Chrome extension will only work if you **enable Custom Formatters** in the DevTools settings.
+
+![](https://cloud.githubusercontent.com/assets/1303660/18231278/a271ede6-72ad-11e6-8623-367f3e8eb686.png)
+
 ## How it works
 
 The code in "/immutable-devtools" is essentially just a copy of `immutable-devtools`.
