@@ -14,9 +14,9 @@ Open the console and check that everything looks alright.
 <iframe src="iframe.html"></iframe>
 
 <script>
-    // false means it uses the chrome extension instead of including bundle.js directly
-    const testIsRecord = false;
-    if (testIsRecord) {
+    const testChromeExtension = true
+    if (!testChromeExtension) {
+        // Since we're only loading bundle.js now we can tell it to expose isRecord so it can be tested
         window.__ExposeIsRecordForTesting = true;
         var script = document.createElement("script");
         script.src = "../extension/bundle.js";
