@@ -1,9 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
+var WebpackShellPlugin = require('webpack-shell-plugin');
  
 module.exports = {
   entry: './index.js',
-  output: { path: __dirname, filename: 'extension/bundle.js' },
+  output: { path: __dirname, filename: 'dist/bundle.js' },
   module: {
     loaders: [
       {
@@ -16,4 +17,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new WebpackShellPlugin({
+      onBuildExit: [
+        "node build.js"
+      ]
+    })
+  ]
 };
