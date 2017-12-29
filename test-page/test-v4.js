@@ -1,12 +1,16 @@
 function runTests(){
-    window.test = Immutable.fromJS({"a": "test", b: [{a:2},{b:3}]})
-    console.log(window.test)
+    // window.test = Immutable.fromJS({"a": "test", b: [{a:2},{b:3}]})
+    // console.log(window.test)
 
     class ABRecord extends Immutable.Record({a:1,b:2}) {
       getAB() {
         return this.a + this.b;
       }
     }
+
+    var Foo = Immutable.Record({bar: new Immutable.Map({a: 5}) })
+    var f = Foo()
+    console.log("Expand this and check child renders as a Map", f)
 
     window.record = new ABRecord();
     window.record2 = new ABRecord({a: 2});

@@ -88,6 +88,7 @@ export default function createFormatter() {
     body(record) {
       const defaults = record.clear();
       const children = getKeySeq(record)
+        .toJS()
         .map(key => {
           const style = Immutable.is(defaults.get(key), record.get(key))
             ? defaultValueKeyStyle : alteredValueKeyStyle;
@@ -96,7 +97,7 @@ export default function createFormatter() {
               ['span', style, key + ': '],
               reference(record.get(key))
             ]
-        }).toJS();
+        })
       return [ 'ol', listStyle, ...children ];
     }
   };
