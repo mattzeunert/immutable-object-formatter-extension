@@ -44,7 +44,10 @@ export default function createFormatter() {
     const children = collection
       .map(mapper)
       .toList()
-      .toJS();
+    
+    const jsList = []
+    // Can't just call toJS because that will also call toJS on children inside the list
+    children.forEach(child => jsList.push(child))
     return [ 'ol', listStyle, ...children ];
   }
 

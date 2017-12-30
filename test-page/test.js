@@ -8,6 +8,9 @@ function runTests(){
       }
     }
 
+    var Xyz = new Immutable.Map({a: new Immutable.Map({b:8})})
+    console.log("Expand this and check child renders as a Map", Xyz)
+
     window.record = new ABRecord();
     window.record2 = new ABRecord({a: 2});
     console.log(window.record);

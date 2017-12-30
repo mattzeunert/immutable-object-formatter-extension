@@ -1,8 +1,8 @@
 {
   "name": "Immutable.js Object Formatter",
   "short_name": "Immutable.js Object Formatter",
-  "description": "Transforms Immutable JS objects to a more readable format when they are logged to the console.",
-  "version": "1.6",
+  "description": "Mkaes Immutable JS objects more readable when they are logged to the console.",
+  "version": "1.7",
   "manifest_version": 2,
   "minimum_chrome_version": "48.0",
   "content_scripts": [

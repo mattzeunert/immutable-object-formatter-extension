@@ -8,6 +8,9 @@ function runTests(){
       }
     }
 
+    var Xyz = new Immutable.Map({a: new Immutable.Map({b:8})})
+    console.log("Expand this and check child renders as a Map", Xyz)
+
     var Foo = Immutable.Record({bar: new Immutable.Map({a: 5}) })
     var f = Foo()
     console.log("Expand this and check child renders as a Map", f)
