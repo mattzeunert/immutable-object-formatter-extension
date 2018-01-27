@@ -1,8 +1,7 @@
-import installDevTools from './immutable-devtools'
-installDevTools()
+import installDevTools from 'immutable-devtools'
+import Immutable from 'immutable'
 
-import {isRecord as isRecordForTesting} from "./immutable-devtools/create-formatters"
-
-if (window.__ExposeIsRecordForTesting) {
-    window.isRecordForTesting = isRecordForTesting;
+if (!window.__ImmutableJSDevToolsFormattersInstalled === true) {
+    installDevTools(Immutable)
+    window.__ImmutableJSDevToolsFormattersInstalled = true;
 }
