@@ -8,6 +8,12 @@ Based on [immutable-devtools](https://github.com/andrewdavey/immutable-devtools)
 
 The Chrome extension will only work if you **enable Custom Formatters** in the DevTools settings.
 
+### Step 1: Open DevTools settings
+
+![](https://user-images.githubusercontent.com/1303660/36625688-48c2160e-195f-11e8-9a5f-ba9ea8553b06.png)
+
+### Step 2: Enable custom formatters
+
 ![](https://cloud.githubusercontent.com/assets/1303660/18231278/a271ede6-72ad-11e6-8623-367f3e8eb686.png)
 
 ## How it works
