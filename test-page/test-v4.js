@@ -40,6 +40,8 @@ function runTests(){
     window.stack = Immutable.Stack(["hello", "aaa"])
     console.log(window.stack)
 
+    console.log("shoudln't cause error", Immutable.Record.prototype)
+
     if (window.isRecordForTesting) {
         console.assert(isRecordForTesting(record))
         console.assert(isRecordForTesting(record2));
