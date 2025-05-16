@@ -14,7 +14,7 @@
     }
   ],
   "devtools_page": "devtool.html",
-  "permissions": ["http://*/*", "http://*/*", "file://*/*"],
+  "permissions": ["http://*/*", "https://*/*", "file://*/*"],
   "icons": {
     "128": "icon-128.png"
   },
